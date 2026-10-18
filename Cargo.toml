@@ -8,7 +8,7 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/WyattAu/docs-core"
 description = "Rust docs pipeline core — CommonMark+GFM to static HTML with astro-island-compatible island emission, so a Rust shell hydrates the estate's existing SolidJS bundles. Consolidates Tachyon + docs-pipeline + the starlight-* stack (ADR-0004 §2.5)"
 readme = "README.md"
-keywords = ["markdown", "static-site-generator", "islands", "documentation"]
+keywords = ["markdown", "ssg", "islands", "documentation", "static-site"]
 categories = ["text-processing", "web-programming"]
 exclude = [".github/", "supply-chain/"]
 
