@@ -97,7 +97,11 @@ impl Island {
         Ok(Island {
             name,
             client,
-            props: if props.is_empty() { "{}".to_owned() } else { props.to_owned() },
+            props: if props.is_empty() {
+                "{}".to_owned()
+            } else {
+                props.to_owned()
+            },
         })
     }
 

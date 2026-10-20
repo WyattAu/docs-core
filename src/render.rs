@@ -23,7 +23,10 @@ pub fn render(markdown: &str, base: &str) -> Result<String, DocsError> {
 
     let mut out = String::new();
     let mut headings: Vec<u8> = Vec::new();
-    let mut list_open = false;
+    // Open lists, innermost last, with their ordered flags — the closing tag
+    // must match the element actually opened, and paragraphs are suppressed
+    // only while *some* list is open.
+    let mut list_stack: Vec<bool> = Vec::new();
     let mut in_code_block = false;
     let mut parser = Parser::new_ext(markdown, options);
 
@@ -39,12 +42,12 @@ pub fn render(markdown: &str, base: &str) -> Result<String, DocsError> {
                 let _ = write!(out, "</h{level}>");
             }
             Event::Start(Tag::Paragraph) => {
-                if !list_open {
+                if list_stack.is_empty() {
                     out.push_str("<p>");
                 }
             }
             Event::End(TagEnd::Paragraph) => {
-                if !list_open {
+                if list_stack.is_empty() {
                     out.push_str("</p>");
                 }
             }
@@ -61,11 +64,25 @@ pub fn render(markdown: &str, base: &str) -> Result<String, DocsError> {
                 let _ = write!(out, "<a href=\"{}\">", escape_attr(&dest_url));
             }
             Event::End(TagEnd::Link) => out.push_str("</a>"),
-            Event::Start(Tag::Image { dest_url, title, .. }) => {
+            Event::Start(Tag::Image {
+                dest_url, title, ..
+            }) => {
+                // The alt text arrives as a Text event between Start and End;
+                // capture it into the attribute instead of leaking it into
+                // the output as visible body text.
+                let mut alt = String::new();
+                for inner in parser.by_ref() {
+                    match inner {
+                        Event::Text(t) => alt.push_str(&t),
+                        Event::End(TagEnd::Image) => break,
+                        _ => {}
+                    }
+                }
                 let _ = write!(
                     out,
-                    "<img src=\"{}\" alt=\"\"{}>",
+                    "<img src=\"{}\" alt=\"{}\"{}>",
                     escape_attr(&dest_url),
+                    escape_attr(&alt),
                     if title.is_empty() {
                         String::new()
                     } else {
@@ -110,16 +127,16 @@ pub fn render(markdown: &str, base: &str) -> Result<String, DocsError> {
             Event::Start(Tag::List(start)) => {
                 let ordered = start.is_some();
                 let _ = write!(out, "<{}>", if ordered { "ol" } else { "ul" });
-                list_open = true;
+                list_stack.push(ordered);
             }
             Event::End(TagEnd::List(_)) => {
-                list_open = false;
-                // We open <ul>/<ol> but the closing tag depends on which; the
-                // renderer tracks it through the last open marker.
-                if out.contains("<ol><li") || out.contains("<ol>\n<li") {
-                    out = out.replacen("<ol>", "</li></ol>", 1);
-                } else if out.contains("<ul><li") {
-                    out = out.replacen("<ul>", "</li></ul>", 1);
+                // Close the element that was actually opened — the event does
+                // not carry the ordered flag, so the stack is the source of
+                // truth. Empty pop = unbalanced end; emit nothing.
+                match list_stack.pop() {
+                    Some(true) => out.push_str("</ol>"),
+                    Some(false) => out.push_str("</ul>"),
+                    None => {}
                 }
             }
             Event::Start(Tag::Item) => out.push_str("<li>"),
