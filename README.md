@@ -1,6 +1,6 @@
 # docs-core
 
-The Rust docs pipeline core (ADR-0004 §2.5) — consolidating what Tachyon
+The Rust docs pipeline core (ADR-0004 §2.5): consolidating what Tachyon
 (16 crates), `docs-pipeline`, and the eight `starlight-*` plugins do in three
 languages, with the one seam the ecosystem has no answer for:
 **astro-island-compatible island emission**, so a Rust-rendered shell can
