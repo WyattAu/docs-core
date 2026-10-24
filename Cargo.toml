@@ -1,12 +1,12 @@
 [package]
 name = "docs-core"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 rust-version = "1.85"
 authors = ["Wyatt Au <wyatt_au@protonmail.com>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/WyattAu/docs-core"
-description = "Rust docs pipeline core — CommonMark+GFM to static HTML with astro-island-compatible island emission, so a Rust shell hydrates the estate's existing SolidJS bundles. Consolidates Tachyon + docs-pipeline + the starlight-* stack (ADR-0004 §2.5)"
+description = "Rust docs pipeline core: CommonMark+GFM to static HTML with astro-island-compatible island emission, so a Rust shell hydrates the estate's existing SolidJS bundles. Consolidates Tachyon + docs-pipeline + the starlight-* stack (ADR-0004 §2.5)"
 readme = "README.md"
 keywords = ["markdown", "ssg", "islands", "documentation", "static-site"]
 categories = ["text-processing", "web-programming"]
