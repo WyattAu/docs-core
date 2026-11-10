@@ -38,7 +38,7 @@ framework or move prose rendering into WASM.
 |---|---|---|---|
 | `docs-core` (exists) | L2 | pulldown-cmark | HTML emission + island fences; unchanged through M4 |
 | `docs-witness` | L1 | wasmtime | deterministic sandboxed snippet execution; witness payload model |
-| `docs-search` | L0 | none (std only) | FST + roaring-bitmap index format; wasm32-clean; quantized vector option behind feature |
+| `docs-search` | L0 | fst, roaring (leaf crates; zero estate deps) | FST + roaring-bitmap index format; wasm32-clean; quantized vector option behind feature |
 | `docs-symbols` | L0 | tree-sitter (+per-lang grammars) | symbol-anchored extraction; line-shift-invariant spans |
 | `docs-proof` | L0 | none (serde only) | proof-certificate model + verifier; Lean never linked |
 | `docs-compiler` | L3 | all above + docs-core | CLI: resolves directives, invokes lean out-of-process, emits site |
