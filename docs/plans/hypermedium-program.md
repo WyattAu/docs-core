@@ -73,3 +73,18 @@ the registry agree in one audit pass (estate-audit contract).
   writes reject with an errno to the guest (no host block) - README and
   WitnessConfig docs match observed behavior. Next: watch docs-witness
   CI; then M2 close-out (publish both + estate.yml in one audit pass).
+- 2026-11-10 rev 3: docs-witness CI first run failed on two gates, both
+  fixed (dd870a2, 7121534): (1) quality/deny - wasmtime 34.0.2 hit
+  RUSTSEC-2025-0118 (shared-memory unsoundness; blocking per
+  SECURITY.md) plus unmaintained fxhash via the profiling feature.
+  Moved to wasmtime 36.0.20 (patched line; MSRV now 1.86) with default
+  features off: no profiling (fxhash/ittapi leave the tree entirely),
+  no threads (no shared linear memories at all), no wat (bytes-only
+  contract enforced by the build); wasmtime-wasi keeps defaults (p2 is
+  the p1 builder substrate; component code is compiled but never
+  linked). (2) quality/coverage - Display arms for every error variant
+  plus a Link-path fixture. WASI 36 API moves: WasiCtxBuilder at the
+  crate root, StdoutStream impls live in cli.rs, preview1 unchanged.
+  docs-core PR #2 docs gate was failing on an em-dash in this ledger
+  (SC character rule); fixed, PR CI green. Next: confirm docs-witness
+  CI, then publish + estate.yml in one audit pass.
