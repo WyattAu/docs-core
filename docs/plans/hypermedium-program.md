@@ -38,7 +38,7 @@ the registry agree in one audit pass (estate-audit contract).
   fresco as composition inputs; starlight-* is consolidation input, not
   target). SPEC.md drafted in-repo; ledger created.
 - 2026-11-09 rev 1: SPEC gate run: doc-lint PASS at tier k; advisories:
-  README truth table lacks path rows; llms.txt missing (SC-10) — both become
+  README truth table lacks path rows; llms.txt missing (SC-10); both become
   M2 close-out items. Next: user review, then M2 scaffolds.
 - 2026-11-10 rev 2: user approved; M2 started. docs-search scaffolded from
   the cal-model derivation pattern (single crate, pinned rust-kit.yml CI
