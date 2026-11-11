@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: active
-updated: 2026-11-11  rev: 4
+updated: 2026-11-11  rev: 8
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -17,15 +17,16 @@ estate survey of 2026-11-09 (see Log entry 1).
 | 3 | Draft SPEC.md (4 slices, REQ anchors, milestones) | done | SPEC.md; doc-lint PASS (tier k), 2 advisories | user review of SPEC.md |
 | 4 | docs-witness: deterministic wasmtime runner (L1) | done | WyattAu/docs-witness@85d5667; 10 tests + doctest, clippy/fmt/vet green; CI pending first run | watch CI; publish passes with estate.yml (row 7) |
 | 5 | docs-search: FST+roaring wasm index (L0) | done | WyattAu/docs-search@828ee1c; test/clippy/fmt/vet green; wasm32 build green | crates.io publish + estate.yml registration (row 7) |
-| 6 | docs-proof + docs-symbols: certificate + symbol anchors (L0) | done | docs-symbols@6f19868 (CI green); docs-proof@published 0.1.0, estate.yml 24de917; audit exit 0 | M4 remainder: docs-compiler L3 + Lean package |
+| 6 | docs-proof + docs-symbols: certificate + symbol anchors (L0) | done | docs-symbols@6f19868 (CI green); docs-proof@published 0.1.0, estate.yml 24de917; audit exit 0 | - |
+| 6b | docs-compiler: L3 composition CLI (M3/M4 close) | done | crates.io 0.1.0; CI GREEN (run 43048784970: quality incl. coverage gate + lean-oracle with real kernel); estate.yml 9b81fc7 | merge PR #2 (user) |
 | 7 | Register crates in estate.yml; estate-audit green | done | audit exit 0 online after each publish (docs-search, docs-witness, docs-symbols, docs-proof all registered) | - |
 
 ## Next action
 
-Confirm docs-compiler CI (quality + lean-oracle jobs) green, then the
-program closes: merge PR #2 (SPEC + ledger), and the remaining opt-ins
-are user decisions (publishing the SPEC as CURRENT, coverage-debt
-clearance via a consumer suite pinning docs-compiler).
+Program complete. User decisions remaining: merge PR #2 (SPEC + ledger
+onto docs-core main), optionally stamp SPEC.md CURRENT, and decide the
+first consumer suite for docs-compiler (clears the five coverage-debt
+entries).
 
 ## Blocked
 
@@ -111,6 +112,17 @@ clearance via a consumer suite pinning docs-compiler).
   capability crates (search, witness, symbols, proof) on crates.io +
   registered; M4 remainder is docs-compiler (L3) and the Lean fixture
   package.
+- 2026-11-11 rev 8: PROGRAM COMPLETE. docs-compiler CI green after two
+  CI-lessons fixed forward: (1) GitHub startup-fails a reusable-workflow
+  call with an input the pinned rev lacks - coverage-ignore-regex
+  needed the newer rust-kit rev (898aed5); (2) llvm-cov matches
+  --ignore-filename-regex against absolute paths, so the process-surface
+  regex must be a suffix match. Final shape: main.rs + lean.rs declared
+  process surfaces (ADR-0005), coverage ~89%, lean-oracle job runs the
+  real kernel e2e (all four directive kinds) green. Program totals: 6
+  crates published + registered (core, search, witness, symbols, proof,
+  compiler), estate-audit exit 0, all CI green. Outstanding user calls:
+  merge PR #2; SPEC stamp; consumer-suite decision.
 - 2026-11-11 rev 7: M4 CLOSED (pending CI). docs-compiler 0.1.0 shipped:
   fence scanner + resolution through all three capability crates +
   docs-core render; CLI `docs-compiler <input> [-o] [--root]`. Real
