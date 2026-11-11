@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: active
-updated: 2026-11-11  rev: 4
+updated: 2026-11-11  rev: 5
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -17,15 +17,14 @@ estate survey of 2026-11-09 (see Log entry 1).
 | 3 | Draft SPEC.md (4 slices, REQ anchors, milestones) | done | SPEC.md; doc-lint PASS (tier k), 2 advisories | user review of SPEC.md |
 | 4 | docs-witness: deterministic wasmtime runner (L1) | done | WyattAu/docs-witness@85d5667; 10 tests + doctest, clippy/fmt/vet green; CI pending first run | watch CI; publish passes with estate.yml (row 7) |
 | 5 | docs-search: FST+roaring wasm index (L0) | done | WyattAu/docs-search@828ee1c; test/clippy/fmt/vet green; wasm32 build green | crates.io publish + estate.yml registration (row 7) |
-| 6 | docs-proof + docs-symbols: certificate + symbol anchors (L0) | planned | SPEC.md REQ-P / REQ-S | design directive grammar first |
+| 6 | docs-proof + docs-symbols: certificate + symbol anchors (L0) | docs-symbols done; docs-proof planned (M4) | WyattAu/docs-symbols@6f19868; crates.io 0.1.0; estate.yml e9ce960; audit exit 0 | docs-proof: Lean package + certificate crate (M4) |
 | 7 | Register crates in estate.yml; estate-audit green | done | engineering-standards@ca125d7; audit exit 0 online (0 errors, 0 drift); crates published: docs-search 0.1.0, docs-witness 0.1.0 | M3: docs-symbols scaffold |
 
 ## Next action
 
-Scaffold docs-symbols (L0, tree-sitter symbol-anchored includes) per
-SPEC §4.2: REQ-S1 line-shift invariant, REQ-S2 typed build failures,
-REQ-S3 stable anchor IDs. Coverage debt on both M2 crates clears when
-docs-compiler composes them (M4).
+M4: docs-proof (Lean package from OmniLean-template + L0 certificate
+crate) and the docs-compiler L3 scaffold that emits include-symbol pages
+(M3 close criteria). Watch docs-symbols CI first run.
 
 ## Blocked
 
