@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: active
-updated: 2026-11-11  rev: 5
+updated: 2026-11-11  rev: 4
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -17,14 +17,16 @@ estate survey of 2026-11-09 (see Log entry 1).
 | 3 | Draft SPEC.md (4 slices, REQ anchors, milestones) | done | SPEC.md; doc-lint PASS (tier k), 2 advisories | user review of SPEC.md |
 | 4 | docs-witness: deterministic wasmtime runner (L1) | done | WyattAu/docs-witness@85d5667; 10 tests + doctest, clippy/fmt/vet green; CI pending first run | watch CI; publish passes with estate.yml (row 7) |
 | 5 | docs-search: FST+roaring wasm index (L0) | done | WyattAu/docs-search@828ee1c; test/clippy/fmt/vet green; wasm32 build green | crates.io publish + estate.yml registration (row 7) |
-| 6 | docs-proof + docs-symbols: certificate + symbol anchors (L0) | docs-symbols done; docs-proof planned (M4) | WyattAu/docs-symbols@6f19868; crates.io 0.1.0; estate.yml e9ce960; audit exit 0 | docs-proof: Lean package + certificate crate (M4) |
-| 7 | Register crates in estate.yml; estate-audit green | done | engineering-standards@ca125d7; audit exit 0 online (0 errors, 0 drift); crates published: docs-search 0.1.0, docs-witness 0.1.0 | M3: docs-symbols scaffold |
+| 6 | docs-proof + docs-symbols: certificate + symbol anchors (L0) | done | docs-symbols@6f19868 (CI green); docs-proof@published 0.1.0, estate.yml 24de917; audit exit 0 | M4 remainder: docs-compiler L3 + Lean package |
+| 7 | Register crates in estate.yml; estate-audit green | done | audit exit 0 online after each publish (docs-search, docs-witness, docs-symbols, docs-proof all registered) | - |
 
 ## Next action
 
-M4: docs-proof (Lean package from OmniLean-template + L0 certificate
-crate) and the docs-compiler L3 scaffold that emits include-symbol pages
-(M3 close criteria). Watch docs-symbols CI first run.
+M4 remainder: scaffold docs-compiler (L3 CLI) — resolves
+include-symbol/witness/lean-check fences via the three published crates,
+invokes lean out-of-process against the OmniLean-template fixture
+package, emits pages with all four directive kinds (M3/M4 close
+criteria, SPEC §5). docs-proof CI first run to confirm.
 
 ## Blocked
 
@@ -87,6 +89,29 @@ crate) and the docs-compiler L3 scaffold that emits include-symbol pages
   docs-core PR #2 docs gate was failing on an em-dash in this ledger
   (SC character rule); fixed, PR CI green. Next: confirm docs-witness
   CI, then publish + estate.yml in one audit pass.
+- 2026-11-11 rev 5: M3 crate shipped. docs-symbols 0.1.0 (ea8cdab, then
+  clippy-fix amend 6f19868): tree-sitter 0.26 + rust grammar 0.24;
+  ordered-name resolution with impl precedence for deeper paths and all
+  impl bodies (inherent + trait) tried in document order; fnv1a64 anchor
+  IDs; strict parsing. Findings: tree-sitter 0.26 Point has no byte
+  field (use start_byte); preview1-style wasm build of grammar C needs
+  a libc sysroot - crate is native-only by design, CI wasm: false
+  recorded. Publish + estate.yml (docs-symbols entry) + audit exit 0
+  online; canon e9ce960. All three program crates are now on crates.io.
+  M4 next: docs-proof (OmniLean-template base) + docs-compiler L3
+  scaffold.
+- 2026-11-11 rev 6: docs-symbols CI green (run 42955962204). docs-proof
+  0.1.0 shipped the same day: certificate record (theorem, sha256
+  source hash, toolchain, kernel result), serde round-trip + badge JSON
+  differentially tested against serde, total verifier (StaleSource /
+  StaleToolchain / Version / NotVerified). Zero Lean linkage in the
+  tree - REQ-P1's structural half; the crate never creates claims, only
+  records and checks them (SECURITY.md trust model). Published +
+  registered; audit exit 0 online (canon 24de917, on top of the user's
+  concurrent docs-search registration). Program state: all four
+  capability crates (search, witness, symbols, proof) on crates.io +
+  registered; M4 remainder is docs-compiler (L3) and the Lean fixture
+  package.
 - 2026-11-11 rev 4: M2 CLOSED. docs-witness CI green (run 42832126074).
   Both crates published to crates.io (docs-search 0.1.0, docs-witness
   0.1.0). estate.yml updated (docs-search crates list added to the
