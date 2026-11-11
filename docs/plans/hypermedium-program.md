@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: active
-updated: 2026-11-10  rev: 3
+updated: 2026-11-11  rev: 4
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -18,14 +18,14 @@ estate survey of 2026-11-09 (see Log entry 1).
 | 4 | docs-witness: deterministic wasmtime runner (L1) | done | WyattAu/docs-witness@85d5667; 10 tests + doctest, clippy/fmt/vet green; CI pending first run | watch CI; publish passes with estate.yml (row 7) |
 | 5 | docs-search: FST+roaring wasm index (L0) | done | WyattAu/docs-search@828ee1c; test/clippy/fmt/vet green; wasm32 build green | crates.io publish + estate.yml registration (row 7) |
 | 6 | docs-proof + docs-symbols: certificate + symbol anchors (L0) | planned | SPEC.md REQ-P / REQ-S | design directive grammar first |
-| 7 | Register crates in estate.yml; estate-audit green | planned | engineering-standards/estate.yml | after first crate publishes |
+| 7 | Register crates in estate.yml; estate-audit green | done | engineering-standards@ca125d7; audit exit 0 online (0 errors, 0 drift); crates published: docs-search 0.1.0, docs-witness 0.1.0 | M3: docs-symbols scaffold |
 
 ## Next action
 
-Scaffold docs-witness (L1, wasmtime) per SPEC §4.1: ledger row 4 goes
-active next session. docs-search publish (cargo publish) is a separate
-gate: do it together with the estate.yml entry so GitHub, crates.io, and
-the registry agree in one audit pass (estate-audit contract).
+Scaffold docs-symbols (L0, tree-sitter symbol-anchored includes) per
+SPEC §4.2: REQ-S1 line-shift invariant, REQ-S2 typed build failures,
+REQ-S3 stable anchor IDs. Coverage debt on both M2 crates clears when
+docs-compiler composes them (M4).
 
 ## Blocked
 
@@ -88,3 +88,10 @@ the registry agree in one audit pass (estate-audit contract).
   docs-core PR #2 docs gate was failing on an em-dash in this ledger
   (SC character rule); fixed, PR CI green. Next: confirm docs-witness
   CI, then publish + estate.yml in one audit pass.
+- 2026-11-11 rev 4: M2 CLOSED. docs-witness CI green (run 42832126074).
+  Both crates published to crates.io (docs-search 0.1.0, docs-witness
+  0.1.0). estate.yml updated (docs-search crates list added to the
+  pre-existing entry; docs-witness entry added) + --sync; estate-audit
+  online: exit 0, 0 errors, 0 drift; both crates in coverage-debt class
+  until docs-compiler composes them (M4). Canon pushed ca125d7. M3 next:
+  docs-symbols (tree-sitter).
