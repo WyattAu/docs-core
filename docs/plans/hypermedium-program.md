@@ -22,11 +22,10 @@ estate survey of 2026-11-09 (see Log entry 1).
 
 ## Next action
 
-M4 remainder: scaffold docs-compiler (L3 CLI) — resolves
-include-symbol/witness/lean-check fences via the three published crates,
-invokes lean out-of-process against the OmniLean-template fixture
-package, emits pages with all four directive kinds (M3/M4 close
-criteria, SPEC §5). docs-proof CI first run to confirm.
+Confirm docs-compiler CI (quality + lean-oracle jobs) green, then the
+program closes: merge PR #2 (SPEC + ledger), and the remaining opt-ins
+are user decisions (publishing the SPEC as CURRENT, coverage-debt
+clearance via a consumer suite pinning docs-compiler).
 
 ## Blocked
 
@@ -112,6 +111,19 @@ criteria, SPEC §5). docs-proof CI first run to confirm.
   capability crates (search, witness, symbols, proof) on crates.io +
   registered; M4 remainder is docs-compiler (L3) and the Lean fixture
   package.
+- 2026-11-11 rev 7: M4 CLOSED (pending CI). docs-compiler 0.1.0 shipped:
+  fence scanner + resolution through all three capability crates +
+  docs-core render; CLI `docs-compiler <input> [-o] [--root]`. Real
+  lean oracle (REQ-P2): local lean 4.35.0 against pinned fixture
+  package - positive, kernel-rejection (False := trivial), and sorry
+  cases all typed. Findings: Lean 4.35 emits diagnostics on stdout with
+  backtick wording (sorry guard scans combined output); CommonMark
+  forbids backticks in fence info strings (guard added after the
+  e2e/fence tests caught document-swallowing). lean_oracle tests run
+  ignored-by-default with a dedicated elan CI job (-- --ignored), so
+  the shared quality gate stays lean-free. Published + registered
+  (estate.yml 9b81fc7, audit exit 0). Five crates total: core, search,
+  witness, symbols, proof, compiler.
 - 2026-11-11 rev 4: M2 CLOSED. docs-witness CI green (run 42832126074).
   Both crates published to crates.io (docs-search 0.1.0, docs-witness
   0.1.0). estate.yml updated (docs-search crates list added to the
