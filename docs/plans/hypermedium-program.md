@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-12  rev: 11
+updated: 2026-11-12  rev: 12
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -21,19 +21,43 @@ estate survey of 2026-11-09 (see Log entry 1).
 | 6b | docs-compiler: L3 composition CLI (M3/M4 close) | done | crates.io 0.1.0; CI GREEN (run 43048784970: quality incl. coverage gate + lean-oracle with real kernel); estate.yml 9b81fc7 | merge PR #2 (user) |
 | 7 | Register crates in estate.yml; estate-audit green | done | audit exit 0 online after each publish (docs-search, docs-witness, docs-symbols, docs-proof all registered) | - |
 
-None: program complete. Spec stamped CURRENT 2026-11-12. Dogfooded
-2026-11-12: estate-integration round 15 (`docs_program` suite, 758b64a)
-pins all five program crates exactly - coverage debt cleared for every
-one. Open opt-ins only: client-side wasm certificate re-checker
-(REQ-P4), docs-search 0.2 (tf postings + quantized vectors). Gate
-posture graduated draft -> current 2026-11-12 (truth-table path rows +
-llms.txt; docs CI green at the new posture, run 43152847541).
+None: program complete through every opt-in. SPEC CURRENT; gate
+posture current; dogfooded (round 15). Opt-ins closed 2026-11-12:
+docs-proof 0.1.2 ships REQ-P4 packaging (browser ABI + JS glue +
+63.6 KB bundle under the 80 KB budget, wasmtime-driven oracle in CI);
+docs-search 0.2.0 ships tf postings with full BM25 (format v2) and the
+quantized-vector section behind the `vectors` feature; all six repos
+pin rust-kit@4883fca0; all five crate READMEs carry truth tables
+(posture ripple). estate-integration suite green at the new pins.
+Flagged outside this program: estate-audit reports omni-cap and
+omni-ring published-but-unclaimed (repo-registry bookkeeping for the
+owner to resolve). Next program, if any: docs-core Wave 2 (math,
+sanitization, dev server) per SPEC §3.
 
 ## Blocked
 
 - none
 
 ## Log
+
+- 2026-11-12 rev 12: all opt-ins shipped. docs-search 0.2.0
+  (1edadad): format v2 (DSIDX2) with (doc, tf) postings - full BM25
+  replaces the unit-tf placeholder, roaring leaves the floor - plus the
+  REQ-Q1 vectors feature (fixed max-abs i8 quantization, cosine
+  query_vector, VectorsUnsupported when the feature is off). docs-proof
+  0.1.2 (b328fd7): REQ-P4 packaging - wasm32 C ABI (dps_alloc/free/
+  verify + error slot, DPS_* codes), CHECKER_JS glue, committed bundle
+  at 63,589 bytes raw (budget 80 KB; the earlier 4 KB figure predated
+  serde_json + sha2 reaching the artifact), CI checker-bundle job
+  rebuilds/gates/diffs and drives the module through the glue's exact
+  call sequence with wasmtime. Honest note: panic=abort + opt-z in the
+  cdylib profile (consumer profiles override). Pin sweep: all six
+  repos -> rust-kit@4883fca0 (docs-witness 22080ca, docs-symbols
+  d0ecfe5, docs-core 735a3c0, docs-compiler 230e37b). Posture ripple:
+  Where-the-truth-lives tables in all five crate READMEs.
+  estate-integration 21bce99: docs-search =0.2.0, docs-proof =0.1.2,
+  suite green. Audit: zero docs drift; omni-cap/omni-ring unclaimed
+  errors are outside this program.
 
 - 2026-11-12 rev 11: docs-proof 0.1.1 shipped (REQ-P4 core): `verify_badge` +
   `BadgeError` validate badge JSON structurally client-side; serde_json
