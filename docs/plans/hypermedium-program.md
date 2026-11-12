@@ -57,7 +57,16 @@ sanitization, dev server) per SPEC §3.
   Where-the-truth-lives tables in all five crate READMEs.
   estate-integration 21bce99: docs-search =0.2.0, docs-proof =0.1.2,
   suite green. Audit: zero docs drift; omni-cap/omni-ring unclaimed
-  errors are outside this program.
+  errors are outside this program. Follow-ups, same day: rust-kit pins
+  must be FULL 40-char SHAs - a 12-char short SHA fails workflow parse
+  at 0s in every repo (fixed everywhere, 3470db8/a54f000/a831379/
+  788a7fa/3ef2834/4d836e4). estate-integration msrv, red since Nov 7,
+  truthed to the lockfile floor: rust-version 1.95 (egui/emath/epaint
+  0.37 demand it; wasmtime line 1.86, webhookkit 1.87, zip 1.88 beneath)
+  - msrv + CI green at 2dd5272. docs-proof's checker-bundle oracle runs
+  against BOTH the CI-built module and the committed asset: rustc
+  codegen is not byte-reproducible, so freshness-as-diff is impossible
+  (daf0169).
 
 - 2026-11-12 rev 11: docs-proof 0.1.1 shipped (REQ-P4 core): `verify_badge` +
   `BadgeError` validate badge JSON structurally client-side; serde_json
