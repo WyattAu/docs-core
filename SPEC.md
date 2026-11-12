@@ -1,6 +1,6 @@
 # SPEC: docs-core extension program (hypermedium slices)
 
-Status: DRAFT
+Status: CURRENT (adopted 2026-11-12; gates green at tier k, PR #2 merged)
 Tier: k (library kits; composition binaries inherit Tier B CI unless concurrency-primitive)
 Owner: WyattAu
 Scope: the four "hypermedium" slices that extend docs-core (ADR-0004 §2.5):

@@ -1,7 +1,7 @@
 # hypermedium-program
 
-status: active
-updated: 2026-11-11  rev: 8
+status: done
+updated: 2026-11-12  rev: 9
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -23,10 +23,10 @@ estate survey of 2026-11-09 (see Log entry 1).
 
 ## Next action
 
-Program complete. User decisions remaining: merge PR #2 (SPEC + ledger
-onto docs-core main), optionally stamp SPEC.md CURRENT, and decide the
-first consumer suite for docs-compiler (clears the five coverage-debt
-entries).
+None: program complete. Spec stamped CURRENT 2026-11-12. Open user
+opt-ins only: consumer suite for docs-compiler (clears coverage debt),
+client-side wasm certificate re-checker (REQ-P4), docs-search 0.2
+(tf postings + quantized vectors).
 
 ## Blocked
 
