@@ -1,0 +1,31 @@
+# docs-core
+
+> The Rust docs pipeline core (ADR-0004 §2.5): CommonMark+GFM to static
+> HTML with astro-island-compatible island emission, so a Rust-rendered
+> shell hydrates the estate's existing SolidJS bundles.
+
+docs-core is the estate's consolidation point for documentation rendering:
+what Tachyon (16 crates), `docs-pipeline`, and the eight `starlight-*`
+plugins did in three languages, behind one L2 crate with one external
+dependency. The extension program around it adds symbol-anchored includes,
+execution witnesses, Lean proof certificates, and client search, composed
+by `docs-compiler`.
+
+## Read first
+
+- [README](https://github.com/WyattAu/docs-core/blob/main/README.md): the island seam, M1 scope, truth table
+- [SPEC](https://github.com/WyattAu/docs-core/blob/main/SPEC.md): the extension program - proof-carrying docs, symbol anchors, witnesses, client search (CURRENT)
+- [Plan ledger](https://github.com/WyattAu/docs-core/blob/main/docs/plans/hypermedium-program.md): milestone status and findings (done)
+
+## Sibling crates
+
+- [docs-compiler](https://github.com/WyattAu/docs-compiler): the L3 CLI resolving all four directive kinds
+- [docs-symbols](https://github.com/WyattAu/docs-symbols): symbol-anchored source extraction (REQ-S)
+- [docs-witness](https://github.com/WyattAu/docs-witness): deterministic WASI execution witnesses (REQ-W)
+- [docs-proof](https://github.com/WyattAu/docs-proof): Lean proof certificates (REQ-P)
+- [docs-search](https://github.com/WyattAu/docs-search): client search index, FST + roaring (REQ-Q)
+
+## Machine-readable
+
+- [Cargo.toml](https://github.com/WyattAu/docs-core/blob/main/Cargo.toml): crate manifest, layer declaration (L2)
+- [estate.yml](https://github.com/WyattAu/engineering-standards/blob/main/estate.yml): the estate registry of record

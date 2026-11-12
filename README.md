@@ -37,6 +37,17 @@ parsed with `JSON.parse`, each component URL imported at most once, `load` /
   Pagefind), versioning, i18n, math (`latex2mathml`), diagrams (D2),
   sanitization for untrusted content (`ammonia`), dev server.
 
+## Where the truth lives
+
+| Concern | Truth | Path |
+|---|---|---|
+| Rendering + island contract | source of record | `src/render.rs`, `src/island.rs` |
+| Extension program (4 slices, REQ anchors, milestones) | SPEC | `SPEC.md` |
+| Program status and findings | plan ledger | `docs/plans/hypermedium-program.md` |
+| Island hydration shim | source of record | `islands/island.mjs`, `islands/island-core.mjs` |
+| Layer declaration + crate manifest | manifest metadata | `Cargo.toml` |
+| Compiled API surface | public API of record | `src/lib.rs` |
+
 ## Tests
 
 `cargo test` (10 tests + doctest, clippy `-D warnings` clean) and
