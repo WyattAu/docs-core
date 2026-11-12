@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-12  rev: 10
+updated: 2026-11-12  rev: 11
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -21,8 +21,6 @@ estate survey of 2026-11-09 (see Log entry 1).
 | 6b | docs-compiler: L3 composition CLI (M3/M4 close) | done | crates.io 0.1.0; CI GREEN (run 43048784970: quality incl. coverage gate + lean-oracle with real kernel); estate.yml 9b81fc7 | merge PR #2 (user) |
 | 7 | Register crates in estate.yml; estate-audit green | done | audit exit 0 online after each publish (docs-search, docs-witness, docs-symbols, docs-proof all registered) | - |
 
-## Next action
-
 None: program complete. Spec stamped CURRENT 2026-11-12. Dogfooded
 2026-11-12: estate-integration round 15 (`docs_program` suite, 758b64a)
 pins all five program crates exactly - coverage debt cleared for every
@@ -37,6 +35,16 @@ llms.txt; docs CI green at the new posture, run 43152847541).
 
 ## Log
 
+- 2026-11-12 rev 11: docs-proof 0.1.1 shipped (REQ-P4 core): `verify_badge` +
+  `BadgeError` validate badge JSON structurally client-side; serde_json
+  joins the runtime floor; wasm32 cdylib measures 4 KB raw against the
+  80 KB budget; wasm: true in CI (run 43232670709 green). Drift caught
+  by the audit: estate-integration bumped to docs-proof =0.1.1
+  (f9869a1), docs_program suite green at the new version. Fleet lesson
+  adopted: CARGO_TARGET_DIR never points into /tmp (the janitor reaps
+  1h-idle target dirs - the likely cause of the vanished build trees on
+  2026-11-10); the shared ~/.cache/cargo-target is the sanctioned
+  target.
 - 2026-11-09 rev 1: estate survey complete; dogfood map established (docs-core
   hub; Tachyon predecessor; cas-kit/crdts-kit/shm-rings/formula-lang/polyfont/
   fresco as composition inputs; starlight-* is consolidation input, not
