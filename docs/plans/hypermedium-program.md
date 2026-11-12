@@ -26,7 +26,9 @@ estate survey of 2026-11-09 (see Log entry 1).
 None: program complete. Spec stamped CURRENT 2026-11-12. Open user
 opt-ins only: consumer suite for docs-compiler (clears coverage debt),
 client-side wasm certificate re-checker (REQ-P4), docs-search 0.2
-(tf postings + quantized vectors).
+(tf postings + quantized vectors). Gate posture graduated draft ->
+current 2026-11-12 (truth-table path rows + llms.txt; docs CI green at
+the new posture, run 43152847541).
 
 ## Blocked
 
