@@ -17,7 +17,7 @@ url = "https://raw.githubusercontent.com/zcash/rust-ecosystem/main/supply-chain/
 audit-as-crates-io = true
 
 [[exemptions.ammonia]]
-version = "4.2.4"
+version = "4.2.5"
 criteria = "safe-to-deploy"
 
 [[exemptions.bitflags]]
@@ -33,7 +33,7 @@ version = "0.2.7"
 criteria = "safe-to-deploy"
 
 [[exemptions.docs-core]]
-version = "0.2.0"
+version = "0.2.1"
 criteria = "safe-to-deploy"
 
 [[exemptions.dtoa]]
