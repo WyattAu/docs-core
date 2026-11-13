@@ -24,3 +24,14 @@
 
 - Dependency floor grows by two (Wave 2 unfreezes the M4 floor, per
   SPEC §3): `latex2mathml`, `ammonia`.
+
+## [0.2.1] - 2026-11-13
+
+### Security
+
+- `ammonia` upgraded to 4.2.5 for RUSTSEC-2026-0533 (mutation XSS via
+  MathML/SVG namespace confusion - the exact integration points this
+  crate's sanitizer allowlists). No API changes; the sanitizer's
+  allowlist is unchanged and the crate's own tests pass unchanged.
+  Found by docs-compiler's cargo-deny advisory gate the day the SEO
+  emission shipped.
