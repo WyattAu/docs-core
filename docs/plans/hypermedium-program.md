@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-13  rev: 13
+updated: 2026-11-13  rev: 14
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -49,10 +49,10 @@ server). Versioning, i18n, diagrams (D2), and the Pagefind question
 
 | # | Task | Status | Evidence | Next |
 |---|------|--------|----------|------|
-| W2-1 | docs-core math: latex2mathml -> build-time MathML | in_progress | lib.rs names the dep; pulldown-cmark 0.13 ENABLE_MATH | golden tests; 0.2.0 |
-| W2-2 | docs-core sanitization: ammonia allowlist | in_progress | render_untrusted strips island fences PRE-render (hydration is a trusted-author surface; the JSON-props script tag cannot be value-constrained in ammonia) | script/math survival tests |
-| W2-3 | dev server: docs-compiler `serve` (NOT docs-core) | in_progress | docs-core is L2 "no web framework"; the CLI is the runtime surface | tiny_http + notify; compile-on-change |
-| W2-4 | dogfood round 16 + pins + audit | blocked | depends W2-1..3 | estate-integration =0.2.0 pins |
+| W2-1 | docs-core math: latex2mathml -> build-time MathML | done | 0.2.0 published (2e1e99c); ENABLE_MATH arms; BadMath fails the render; scanner skips closers inside unbalanced braces (documented) | - |
+| W2-2 | docs-core sanitization: ammonia allowlist | done | sanitize() + render_untrusted(); islands stripped PRE-render; scripts die, math survives (tests/sanitize_math.rs) | - |
+| W2-3 | dev server: docs-compiler `serve` (NOT docs-core) | done | 0.2.0 published (2704a93); compile-on-change, traversal guard, fail-loud per page; VERIFIED ON DEVICE via adb reverse: MathML renders in mobile Chrome, zero client JS | - |
+| W2-4 | dogfood round 16 + pins + audit | done | estate-integration 4b38f3d: docs-core =0.2.0 (ui_semantics green, no $-prose regressions), docs-compiler =0.2.0; docs_program 5/5 with the Wave 2 interop test; audit: zero docs drift (omni-* errors remain, owner bookkeeping) | CI watch |
 
 - 2026-11-12 rev 12: all opt-ins shipped. docs-search 0.2.0
   (1edadad): format v2 (DSIDX2) with (doc, tf) postings - full BM25
