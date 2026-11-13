@@ -52,7 +52,7 @@ server). Versioning, i18n, diagrams (D2), and the Pagefind question
 | W2-1 | docs-core math: latex2mathml -> build-time MathML | done | 0.2.0 published (2e1e99c); ENABLE_MATH arms; BadMath fails the render; scanner skips closers inside unbalanced braces (documented) | - |
 | W2-2 | docs-core sanitization: ammonia allowlist | done | sanitize() + render_untrusted(); islands stripped PRE-render; scripts die, math survives (tests/sanitize_math.rs) | - |
 | W2-3 | dev server: docs-compiler `serve` (NOT docs-core) | done | 0.2.0 published (2704a93); compile-on-change, traversal guard, fail-loud per page; VERIFIED ON DEVICE via adb reverse: MathML renders in mobile Chrome, zero client JS | - |
-| W2-4 | dogfood round 16 + pins + audit | done | estate-integration 4b38f3d: docs-core =0.2.0 (ui_semantics green, no $-prose regressions), docs-compiler =0.2.0; docs_program 5/5 with the Wave 2 interop test; audit: zero docs drift (omni-* errors remain, owner bookkeeping) | CI watch |
+| W2-4 | dogfood round 16 + pins + audit | done | estate-integration 33211b7: docs-core =0.2.0 (ui_semantics green, no $-prose regressions), docs-compiler =0.2.0; docs_program 5/5 with the Wave 2 interop test; audit: zero docs drift (omni-* errors remain, owner bookkeeping). CI green everywhere at tip after three graph fixes: docs-core had .cargo/config.toml committed (untracked, 8c9b813 - same fleet lesson as estate-integration), vet exemptions for the two new dep trees, and docs-compiler deny.toml admits MPL-2.0 (ammonia/cssparser) + CC0-1.0 (notify) - license-policy delta recorded here | closed |
 
 - 2026-11-12 rev 12: all opt-ins shipped. docs-search 0.2.0
   (1edadad): format v2 (DSIDX2) with (doc, tf) postings - full BM25
