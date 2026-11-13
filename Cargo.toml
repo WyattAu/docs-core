@@ -1,6 +1,6 @@
 [package]
 name = "docs-core"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 rust-version = "1.85"
 authors = ["Wyatt Au <wyatt_au@protonmail.com>"]
@@ -20,6 +20,13 @@ tier = "L2"
 
 [dependencies]
 pulldown-cmark = { version = "0.13", default-features = false, features = ["simd", "html"] }
+# Wave 2 (math): LaTeX -> MathML at build time. MathML needs no client JS,
+# which keeps the static-shell contract (SPEC REQ-Q-adjacent; the browser
+# renders <math> natively).
+latex2mathml = "0.2"
+# Wave 2 (sanitization): untrusted markdown gets the default allowlist
+# plus MathML; island fences are stripped pre-render (see sanitize.rs).
+ammonia = "4"
 thiserror = "2"
 
 [lints.rust]

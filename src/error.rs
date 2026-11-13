@@ -10,4 +10,8 @@ pub enum DocsError {
     /// An island fence's body was not a JSON object.
     #[error("island props must be a JSON object, got: `{0}`")]
     InvalidIslandProps(String),
+    /// A `$`/`$$` math span did not parse as LaTeX (build-time failure;
+    /// the offending span is named, Wave 2 math).
+    #[error("math did not parse as LaTeX: `{0}`")]
+    BadMath(String),
 }

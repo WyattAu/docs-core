@@ -15,11 +15,25 @@ use std::fmt::Write as _;
 /// [`DocsError`] for malformed island fences; Markdown itself never fails —
 /// unknown constructs render their inner content (documented M1 behaviour).
 pub fn render(markdown: &str, base: &str) -> Result<String, DocsError> {
+    render_inner(markdown, base, true)
+}
+
+/// The renderer proper. `allow_islands = false` drops island fences
+/// entirely (untrusted content, Wave 2 sanitization: hydration is a
+/// trusted-author surface).
+pub(crate) fn render_inner(
+    markdown: &str,
+    base: &str,
+    allow_islands: bool,
+) -> Result<String, DocsError> {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
     options.insert(Options::ENABLE_STRIKETHROUGH);
     options.insert(Options::ENABLE_TASKLISTS);
     options.insert(Options::ENABLE_FOOTNOTES);
+    // Wave 2 math: `$...$` and `$$...$$` arrive as InlineMath/DisplayMath
+    // events and leave as build-time MathML (no client JS).
+    options.insert(Options::ENABLE_MATH);
 
     let mut out = String::new();
     let mut headings: Vec<u8> = Vec::new();
@@ -109,8 +123,12 @@ pub fn render(markdown: &str, base: &str) -> Result<String, DocsError> {
                             _ => {}
                         }
                     }
-                    let island = Island::parse(&info, &body)?;
-                    out.push_str(&island.to_html(base));
+                    if allow_islands {
+                        let island = Island::parse(&info, &body)?;
+                        out.push_str(&island.to_html(base));
+                    }
+                    // Untrusted content: the fence (and its props) simply
+                    // disappears - documented `render_untrusted` behaviour.
                     let _ = parser.next(); // the End(CodeBlock) we did not consume
                 }
                 _ => {
@@ -159,6 +177,17 @@ pub fn render(markdown: &str, base: &str) -> Result<String, DocsError> {
             Event::Html(text) | Event::InlineHtml(text) => out.push_str(&text),
             Event::SoftBreak => out.push('\n'),
             Event::HardBreak => out.push_str("<br>"),
+            // Wave 2 math: build-time LaTeX -> MathML. A malformed span
+            // fails the render (BadMath names the offending input) - the
+            // same fail-the-build contract as a malformed island fence.
+            Event::InlineMath(tex) => {
+                let mathml = mathml(&tex, latex2mathml::DisplayStyle::Inline)?;
+                out.push_str(&mathml);
+            }
+            Event::DisplayMath(tex) => {
+                let mathml = mathml(&tex, latex2mathml::DisplayStyle::Block)?;
+                out.push_str(&mathml);
+            }
             _ => {}
         }
     }
@@ -169,6 +198,12 @@ fn escape_html(src: &str) -> String {
     src.replace('&', "&amp;")
         .replace('<', "&lt;")
         .replace('>', "&gt;")
+}
+
+/// Convert one math span to MathML. The output is generated, trusted
+/// markup; only the *input* can fail, and it fails loudly.
+fn mathml(latex: &str, style: latex2mathml::DisplayStyle) -> Result<String, DocsError> {
+    latex2mathml::latex_to_mathml(latex, style).map_err(|_| DocsError::BadMath(latex.to_owned()))
 }
 
 fn escape_attr(src: &str) -> String {

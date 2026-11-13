@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-12  rev: 12
+updated: 2026-11-13  rev: 13
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -32,13 +32,27 @@ pin rust-kit@4883fca0; all five crate READMEs carry truth tables
 Flagged outside this program: estate-audit reports omni-cap and
 omni-ring published-but-unclaimed (repo-registry bookkeeping for the
 owner to resolve). Next program, if any: docs-core Wave 2 (math,
-sanitization, dev server) per SPEC §3.
+sanitization, dev server) per SPEC §3 - STARTED 2026-11-13 as the
+Wave 2 phase below (rev 13).
 
 ## Blocked
 
 - none
 
 ## Log
+
+### Wave 2 phase (opened 2026-11-13, rev 13)
+
+Scope: the three named Wave 2 items only (math, sanitization, dev
+server). Versioning, i18n, diagrams (D2), and the Pagefind question
+(closed: docs-search is the answer, native-only) stay out.
+
+| # | Task | Status | Evidence | Next |
+|---|------|--------|----------|------|
+| W2-1 | docs-core math: latex2mathml -> build-time MathML | in_progress | lib.rs names the dep; pulldown-cmark 0.13 ENABLE_MATH | golden tests; 0.2.0 |
+| W2-2 | docs-core sanitization: ammonia allowlist | in_progress | render_untrusted strips island fences PRE-render (hydration is a trusted-author surface; the JSON-props script tag cannot be value-constrained in ammonia) | script/math survival tests |
+| W2-3 | dev server: docs-compiler `serve` (NOT docs-core) | in_progress | docs-core is L2 "no web framework"; the CLI is the runtime surface | tiny_http + notify; compile-on-change |
+| W2-4 | dogfood round 16 + pins + audit | blocked | depends W2-1..3 | estate-integration =0.2.0 pins |
 
 - 2026-11-12 rev 12: all opt-ins shipped. docs-search 0.2.0
   (1edadad): format v2 (DSIDX2) with (doc, tf) postings - full BM25

@@ -42,6 +42,8 @@ parsed with `JSON.parse`, each component URL imported at most once, `load` /
 | Concern | Truth | Path |
 |---|---|---|
 | Rendering + island contract | source of record | `src/render.rs`, `src/island.rs` |
+| Math (LaTeX -> build-time MathML) | source of record | `src/render.rs` (ENABLE_MATH arms) |
+| Sanitization boundary (untrusted content) | source of record | `src/sanitize.rs` |
 | Extension program (4 slices, REQ anchors, milestones) | SPEC | `SPEC.md` |
 | Program status and findings | plan ledger | `docs/plans/hypermedium-program.md` |
 | Island hydration shim | source of record | `islands/island.mjs`, `islands/island-core.mjs` |

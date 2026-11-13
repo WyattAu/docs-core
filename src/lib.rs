@@ -17,14 +17,18 @@
 //! assert!(html.contains("component-url=\"/_assets/islands/nav-search.js\""));
 //! ```
 //!
-//! # Scope (M1, honest)
+//! # Scope (M1 + Wave 2 math/sanitization, honest)
 //!
 //! In: headings, paragraphs, emphasis/strong/strike, inline + fenced code,
-//! links, images, lists (incl. task lists), blockquotes, rules, and island
-//! fences.
-//! Out (Wave 2, per the ecosystem survey): search indexing (Pagefind),
-//! versioning, i18n, math (`latex2mathml`), diagrams (D2), HTML
-//! sanitization for untrusted content (`ammonia`), and the dev server.
+//! links, images, lists (incl. task lists), blockquotes, rules, island
+//! fences, math (`$...$` / `$$...$$` as build-time MathML via
+//! `latex2mathml` - no client JS, Wave 2), and sanitization for
+//! untrusted content (`sanitize` + `render_untrusted`; islands are
+//! stripped pre-render there, Wave 2).
+//! Out (Wave 2 remainder): search indexing (Pagefind; closed - docs-search
+//! is the answer, native-only per SPEC), versioning, i18n, diagrams (D2),
+//! and the dev server (lands in docs-compiler: docs-core is L2, no web
+//! framework).
 //!
 //! # Layer
 //!
@@ -37,10 +41,12 @@
 mod error;
 mod island;
 mod render;
+mod sanitize;
 
 pub use error::DocsError;
 pub use island::{Client, Island};
 pub use render::render;
+pub use sanitize::{render_untrusted, sanitize};
 
 /// The crate's version, for callers that report it.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
