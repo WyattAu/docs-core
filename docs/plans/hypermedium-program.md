@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-14  rev: 17
+updated: 2026-11-14  rev: 18
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -52,6 +52,7 @@ server). Versioning, i18n, diagrams (D2), and the Pagefind question
 | W2-1 | docs-core math: latex2mathml -> build-time MathML | done | 0.2.0 published (2e1e99c); ENABLE_MATH arms; BadMath fails the render; scanner skips closers inside unbalanced braces (documented) | - |
 | W2-2 | docs-core sanitization: ammonia allowlist | done | sanitize() + render_untrusted(); islands stripped PRE-render; scripts die, math survives (tests/sanitize_math.rs) | - |
 | W2-3 | dev server: docs-compiler `serve` (NOT docs-core) | done | 0.2.0 published (2704a93); compile-on-change, traversal guard, fail-loud per page; VERIFIED ON DEVICE via adb reverse: MathML renders in mobile Chrome, zero client JS | - |
+| W2-8 | solid-fx: three new original components on the island pipeline | done | WaybackTimeline (osint), SerpPreview + LlmTxtForge (seo) committed (6b79394); keyless, React-free, tsc/biome/contract clean; QA gotcha recorded: web.archive.org/cdx sends NO CORS header - reworked to archive.org/wayback/available (CORS-open) year-by-year probes | CI watch |
 | W2-7 | Precompression + shared dictionary (RFC 9842 dcz) + island pipeline | done | docs-compiler 0.5.0/0.5.1: .gz/.br/.zst sidecars, site.dict (Use-As-Dictionary) + .dcz pages, Accept-Encoding negotiation (dcz > br > zstd > gz), site.toml stylesheet/island_shim head wiring; measured 483 gz bytes -> 264 with the dictionary on real island chunks. solid-fx glue (build-islands.mjs): 366 demos -> split chunks + 389 docs-site pages, visual QA on phone - CONFIRMED: DecryptedText island hydrates in mobile
   Chrome; extras/osint BgpAsnInfo does a live RIPEstat ASN lookup from
   the phone (solid-fx 8ea05f9, 366 islands, 389 site pages, 1569
