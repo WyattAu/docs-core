@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-13  rev: 16
+updated: 2026-11-14  rev: 17
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -52,6 +52,7 @@ server). Versioning, i18n, diagrams (D2), and the Pagefind question
 | W2-1 | docs-core math: latex2mathml -> build-time MathML | done | 0.2.0 published (2e1e99c); ENABLE_MATH arms; BadMath fails the render; scanner skips closers inside unbalanced braces (documented) | - |
 | W2-2 | docs-core sanitization: ammonia allowlist | done | sanitize() + render_untrusted(); islands stripped PRE-render; scripts die, math survives (tests/sanitize_math.rs) | - |
 | W2-3 | dev server: docs-compiler `serve` (NOT docs-core) | done | 0.2.0 published (2704a93); compile-on-change, traversal guard, fail-loud per page; VERIFIED ON DEVICE via adb reverse: MathML renders in mobile Chrome, zero client JS | - |
+| W2-7 | Precompression + shared dictionary (RFC 9842 dcz) + island pipeline | done | docs-compiler 0.5.0/0.5.1: .gz/.br/.zst sidecars, site.dict (Use-As-Dictionary) + .dcz pages, Accept-Encoding negotiation (dcz > br > zstd > gz), site.toml stylesheet/island_shim head wiring; measured 483 gz bytes -> 264 with the dictionary on real island chunks. solid-fx glue (build-islands.mjs): 366 demos -> split chunks + 389 docs-site pages, visual QA on phone | CI watch |
 | SEC-1 | RUSTSEC-2026-0533 (ammonia MathML/SVG mXSS) | done | docs-core 0.2.1 (ammonia 4.2.5) published; docs-compiler graph updated (b8ffc13); estate =0.2.1 (3ee8573, suite 7/7); advisories gate green - caught by docs-compiler's deny job the day SEO shipped, exactly the gate working | - |
 | W2-5 | Diagrams: d2 fences -> static SVG | done | docs-compiler 0.3.1 (0.3.0 yanked): out-of-process d2 v0.9.0, body-carrying Directive, diagram-oracle CI job; blank-line fix (raw-HTML block integrity) caught by on-device rendering | - |
 | W2-6 | SEO emission: full documents + head meta + JSON-LD + llms.txt + sitemap + robots (estate-seo floor) | done | docs-compiler 0.4.0 (cf761c3): front-matter inputs with h1/paragraph fallbacks, site.toml site config, recorded AI-crawler policy, attr-escaping (quote breakout found by oracle); verified on phone; round 18 d990f24, suite 7/7 | CI watch |
