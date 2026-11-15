@@ -13,7 +13,7 @@
 //!     "/_assets",
 //! )
 //! .unwrap();
-//! assert!(html.contains("<h1>Chisel</h1>"));
+//! assert!(html.contains("<h1 id=\"chisel\">Chisel</h1>"));
 //! assert!(html.contains("component-url=\"/_assets/islands/nav-search.js\""));
 //! ```
 //!

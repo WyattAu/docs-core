@@ -186,11 +186,7 @@ fn rendering_is_deterministic() {
 
 #[test]
 fn headings_gain_slugified_anchor_ids() {
-    let html = render(
-        "# Getting started\n\n## Configure\n\n## Configure\n",
-        "/",
-    )
-    .unwrap();
+    let html = render("# Getting started\n\n## Configure\n\n## Configure\n", "/").unwrap();
     assert!(html.contains("<h1 id=\"getting-started\">"), "{html}");
     assert!(html.contains("<h2 id=\"configure\">"), "{html}");
     assert!(
