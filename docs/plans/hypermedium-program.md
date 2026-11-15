@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-14  rev: 18
+updated: 2026-11-15  rev: 19
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -54,7 +54,9 @@ server). Versioning, i18n, diagrams (D2), and the Pagefind question
 | W2-3 | dev server: docs-compiler `serve` (NOT docs-core) | done | 0.2.0 published (2704a93); compile-on-change, traversal guard, fail-loud per page; VERIFIED ON DEVICE via adb reverse: MathML renders in mobile Chrome, zero client JS | - |
 | W2-8 | solid-fx: three new original components on the island pipeline | done | WaybackTimeline (osint), SerpPreview + LlmTxtForge (seo) committed (6b79394 + 5490dbe); keyless, React-free, tsc/biome/contract clean. On-device QA on THREE phones: WaybackTimeline renders 14/20 and 18/20 year captures live (availability-probe rework after the CDX no-CORS discovery), SerpPreview inputs + SERP card render; verified on all THREE plugged-in phones: Galaxy A53 (Android 16, 18/20 years), Galaxy S7 (Android 8, 2016 hardware - the compat floor confirmed, 18/20), Pixel 10 Pro (Android 17, 17/20 - one flaky availability probe among 20 parallel calls, allSettled skips by design; a retry pass would tighten it) | repo lint debt: ~20 pre-existing biome diagnostics on ported components + debug scripts (biome 2.5->2.6 drift, predates this work; recorded for the owner) |
 | W2-9 | Precompression + dictionary transport measured live | done | 389-page site: 1569 sidecars (.gz/.br/.zst) + site.dict + per-page .dcz; dcz negotiation 200 | - |
+| W2-10 | solid-fx component batch 2 | done | AsnPrefixes (osint), HeadingOutline + FaqSchemaGen (seo) committed (1a2db87) on the island pipeline; keyless, React-free, tsc/biome/contract clean; phones on standby for QA | islands rebuild + on-device QA |
 | W2-7 | Precompression + shared dictionary (RFC 9842 dcz) + island pipeline | done |
+| W2-10 | solid-fx component batch 2 | done | AsnPrefixes (osint), HeadingOutline + FaqSchemaGen (seo) committed (1a2db87) on the island pipeline; keyless, React-free, tsc/biome/contract clean; phones on standby for QA | islands rebuild + on-device QA |
 | W2-7 | Precompression + shared dictionary (RFC 9842 dcz) + island pipeline | done | docs-compiler 0.5.0/0.5.1: .gz/.br/.zst sidecars, site.dict (Use-As-Dictionary) + .dcz pages, Accept-Encoding negotiation (dcz > br > zstd > gz), site.toml stylesheet/island_shim head wiring; measured 483 gz bytes -> 264 with the dictionary on real island chunks. solid-fx glue (build-islands.mjs): 366 demos -> split chunks + 389 docs-site pages, visual QA on phone - CONFIRMED: DecryptedText island hydrates in mobile
   Chrome; extras/osint BgpAsnInfo does a live RIPEstat ASN lookup from
   the phone (solid-fx 8ea05f9, 366 islands, 389 site pages, 1569
