@@ -35,3 +35,12 @@
   allowlist is unchanged and the crate's own tests pass unchanged.
   Found by docs-compiler's cargo-deny advisory gate the day the SEO
   emission shipped.
+
+## [0.3.0] - 2026-11-15
+
+### Added
+
+- **Heading anchor ids:** every rendered heading gains a slugified `id`
+  (`## Setup` -> `<h2 id="setup">`; duplicates get `-2`/`-3` suffixes), so
+  TOCs and deep links work without post-processing. The slug comes from
+  the heading's plain text (escaped output unaffected).

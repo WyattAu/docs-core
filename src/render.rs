@@ -44,15 +44,39 @@ pub(crate) fn render_inner(
     let mut in_code_block = false;
     let mut parser = Parser::new_ext(markdown, options);
 
+    // Heading anchor ids (Wave 2c.6): every heading gains a slugified id so
+    // TOCs and deep links work. The opening tag is rewritten in place at
+    // End(Heading), once the plain text (and therefore the slug) is known.
+    // Duplicates get -2/-3 suffixes.
+    let mut slug_counts: std::collections::HashMap<String, usize> =
+        std::collections::HashMap::new();
+    let mut heading_text = String::new();
+    let mut heading_open: Option<(usize, u8)> = None; // (offset of "<hN>", level)
+
     while let Some(event) = parser.next() {
         match event {
             Event::Start(Tag::Heading { level, .. }) => {
                 // pulldown's `level` Display already renders "h1".."h6".
                 headings.push(level as u8);
+                heading_text.clear();
+                heading_open = Some((out.len(), level as u8));
                 let _ = write!(out, "<{level}>");
             }
             Event::End(TagEnd::Heading(_)) => {
                 let level = headings.pop().unwrap_or(1);
+                let slug = slugify(&heading_text);
+                let count = slug_counts.entry(slug.clone()).or_insert(0);
+                *count += 1;
+                let id = if *count == 1 {
+                    slug
+                } else {
+                    format!("{slug}-{count}")
+                };
+                if let Some((offset, _)) = heading_open.take() {
+                    let tag = format!("<h{level}>");
+                    let with_id = format!("<h{level} id=\"{id}\">");
+                    out.replace_range(offset..offset + tag.len(), &with_id);
+                }
                 let _ = write!(out, "</h{level}>");
             }
             Event::Start(Tag::Paragraph) => {
@@ -173,7 +197,13 @@ pub(crate) fn render_inner(
             // escaped. If content ever becomes untrusted, sanitize the
             // *output* with `ammonia` (Wave 2, §Scope in lib.rs) — do not
             // silently narrow here.
-            Event::Text(text) => out.push_str(&escape_html(&text)),
+            Event::Text(text) => {
+                // Inside a heading the raw text also feeds the anchor slug.
+                if !headings.is_empty() {
+                    heading_text.push_str(&text);
+                }
+                out.push_str(&escape_html(&text));
+            }
             Event::Html(text) | Event::InlineHtml(text) => out.push_str(&text),
             Event::SoftBreak => out.push('\n'),
             Event::HardBreak => out.push_str("<br>"),
@@ -198,6 +228,30 @@ fn escape_html(src: &str) -> String {
     src.replace('&', "&amp;")
         .replace('<', "&lt;")
         .replace('>', "&gt;")
+}
+
+/// Slugify heading text for anchor ids: lowercase, alphanumerics and
+/// hyphens only, runs collapsed, trimmed. Empty text yields `heading`.
+fn slugify(text: &str) -> String {
+    let mut slug = String::with_capacity(text.len());
+    let mut last_hyphen = true;
+    for c in text.chars() {
+        if c.is_alphanumeric() {
+            for lower in c.to_lowercase() {
+                slug.push(lower);
+            }
+            last_hyphen = false;
+        } else if !last_hyphen {
+            slug.push('-');
+            last_hyphen = true;
+        }
+    }
+    let slug = slug.trim_end_matches('-').to_string();
+    if slug.is_empty() {
+        "heading".to_string()
+    } else {
+        slug
+    }
 }
 
 /// Convert one math span to MathML. The output is generated, trusted

@@ -12,7 +12,7 @@ use docs_core::{render, Client, DocsError, Island};
 #[test]
 fn headings_paragraphs_and_inline_markup() {
     let html = render("# Title\n\nSome *em* and **strong** and `code`.\n", "/").unwrap();
-    assert!(html.contains("<h1>Title</h1>"), "{html}");
+    assert!(html.contains("<h1 id=\"title\">Title</h1>"), "{html}");
     assert!(html.contains("<em>em</em>"));
     assert!(html.contains("<strong>strong</strong>"));
     assert!(html.contains("<code>code</code>"));
@@ -22,8 +22,8 @@ fn headings_paragraphs_and_inline_markup() {
 #[test]
 fn heading_levels_close_correctly() {
     let html = render("## Two\n\n### Three\n", "/").unwrap();
-    assert!(html.contains("<h2>Two</h2>"));
-    assert!(html.contains("<h3>Three</h3>"));
+    assert!(html.contains("<h2 id=\"two\">Two</h2>"));
+    assert!(html.contains("<h3 id=\"three\">Three</h3>"));
 }
 
 #[test]
@@ -182,4 +182,19 @@ fn images_render_with_and_without_titles() {
 fn rendering_is_deterministic() {
     let md = "# X\n\ntext\n";
     assert_eq!(render(md, "/").unwrap(), render(md, "/").unwrap());
+}
+
+#[test]
+fn headings_gain_slugified_anchor_ids() {
+    let html = render(
+        "# Getting started\n\n## Configure\n\n## Configure\n",
+        "/",
+    )
+    .unwrap();
+    assert!(html.contains("<h1 id=\"getting-started\">"), "{html}");
+    assert!(html.contains("<h2 id=\"configure\">"), "{html}");
+    assert!(
+        html.contains("<h2 id=\"configure-2\">"),
+        "duplicate slug deduped: {html}"
+    );
 }
