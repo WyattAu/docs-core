@@ -33,7 +33,7 @@ version = "0.2.7"
 criteria = "safe-to-deploy"
 
 [[exemptions.docs-core]]
-version = "0.2.1"
+version = "0.3.0"
 criteria = "safe-to-deploy"
 
 [[exemptions.dtoa]]
