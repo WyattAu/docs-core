@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-15  rev: 22
+updated: 2026-11-20  rev: 28
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -55,7 +55,36 @@ server). Versioning, i18n, diagrams (D2), and the Pagefind question
 | D | Phase D tenant: pattern-standards canon on the SSG | done | LIVE IN PRODUCTION (wyattau.github.io/pattern-standards, deploy-docs workflow, Pages auto-enabled): 32 pages verified on-device (A53) - chrome, sidebar, canon typeset; local build: 143 sidecars, dictionary - chrome + sidebar + Foundations IV typeset; site.toml committed to the canon repo as the tenant config | - |
 | W2-12 | Estate survey: 10 unregistered repos flagged for the owner | done | pattern-standards, skygauge, clawdius-fleetctl, eventbusd, authbox, flagsd, SimpleInfrastructureStack, peregrine, os-core, homebite-scraper - none in estate.yml; sidecars/daemons (eventbusd/authbox/flagsd) are rust-kit candidates; pattern-standards is an SSG tenant candidate | owner bookkeeping |
 | W2-B | Chrome parity (phase B): breadcrumbs + base_path + og:image + atom feed | done | docs-compiler 0.7.0: base_path prefixes every chrome URL (subpath hosting), breadcrumbs nav in body, og:image/twitter:image, atom.xml feed (dated pages newest-first), styled chrome-wrapped 404.html, CLI build subcommand with --base-path (preview deploys) | - |
-| W2-14 | DocSearch island wasm-first upgrade | superseded (owner reverted the parallel rewrite as incomplete; the reader ABI ships in docs-search 0.3.1 and the JSON-corpus DocSearch is live+verified — the wasm consumer returns to the queue when someone deliberately picks it up) | design settled: props += wasmUrl/binUrl; lazy-load docs_search.wasm + search.bin (0.3.1 reader ABI), query per keystroke, map doc ids -> corpus array (doc id = corpus index); JSON scoring stays the fallback; failure -> silent fallback. Two-session lesson: three attempts at this edit degraded under fatigue - execute on fresh context, surgical edits only, no full-file rewrites | - |
+| W2-14 | DocSearch island wasm-first upgrade | superseded (owner reverted the parallel rewrite as incomplete; the reader ABI ships in docs-search 0.3.1 and the JSON-corpus DocSearch is live+verified - the wasm consumer returns to the queue when someone deliberately picks it up) | design settled: props += wasmUrl/binUrl; lazy-load docs_search.wasm + search.bin (0.3.1 reader ABI), query per keystroke, map doc ids -> corpus array (doc id = corpus index); JSON scoring stays the fallback; failure -> silent fallback. Two-session lesson: three attempts at this edit degraded under fatigue - execute on fresh context, surgical edits only, no full-file rewrites | - |
+
+### Wave-2 remainder scoping (2026-11-20, rev 28)
+
+Scope decision for the two named remainder items, grounded in the live
+tenants (solid-fx preview, pattern-standards canon, estate-portal):
+
+- **Versioning - take the CI-snapshot shape first, not versioned
+  routes.** A versions list in site.toml plus a chrome version banner
+  pointing at sibling paths (`/v0.2/...`) is ~half a session of engine
+  work; each version is a separate deterministic build deployed under
+  its own subpath by tenant CI (estate-portal nightly already has the
+  loop shape). Versioned routes inside one build (route prefixes,
+  canonical-to-default rules, per-version search corpora) are a much
+  larger compiler change with no tenant pulling for it yet. Canonical
+  rule for snapshots: only the default (latest) version emits into
+  sitemap/llms.txt; archives stay crawlable but canonicalized to
+  latest.
+- **i18n - defer until a second locale exists.** Real i18n is three
+  coupled pieces (locale-prefixed route space + hreflang/xhtml:link
+  alternates + per-locale search corpora) plus the unsolved
+  content-sourcing problem: no estate tenant has translated content
+  today, so the engine work would ship unexercised. When a locale
+  arrives: content.<locale>/ overlay tree, chrome strings table,
+  sitemap alternates - sized at 2-3 sessions and pulled by the tenant
+  that needs it, per the dogfood rule.
+
+Both defer with a named trigger rather than a date: the first tenant
+that ships a second version (portal crate docs) or a second locale
+pulls the corresponding scope.
 | W2-13 | solid-fx batch-13+ components (user's data/instruments expansion) | in-progress (owner) | 402->414 islands auto-picked-up by the pipeline; chrome homepage lists Data/Instruments/Fx/Emergent trees on-device | owner continues |
 | W2-8 | solid-fx: three new original components on the island pipeline | done | WaybackTimeline (osint), SerpPreview + LlmTxtForge (seo) committed (6b79394 + 5490dbe); keyless, React-free, tsc/biome/contract clean. On-device QA on THREE phones: WaybackTimeline renders 14/20 and 18/20 year captures live (availability-probe rework after the CDX no-CORS discovery), SerpPreview inputs + SERP card render; verified on all THREE plugged-in phones: Galaxy A53 (Android 16, 18/20 years), Galaxy S7 (Android 8, 2016 hardware - the compat floor confirmed, 18/20), Pixel 10 Pro (Android 17, 17/20 - one flaky availability probe among 20 parallel calls, allSettled skips by design; a retry pass would tighten it) | repo lint debt: ~20 pre-existing biome diagnostics on ported components + debug scripts (biome 2.5->2.6 drift, predates this work; recorded for the owner) |
 | W2-9 | Precompression + dictionary transport measured live | done | 389-page site: 1569 sidecars (.gz/.br/.zst) + site.dict + per-page .dcz; dcz negotiation 200 | - |
@@ -77,6 +106,27 @@ server). Versioning, i18n, diagrams (D2), and the Pagefind question
 | W2-5 | Diagrams: d2 fences -> static SVG | done | docs-compiler 0.3.1 (0.3.0 yanked): out-of-process d2 v0.9.0, body-carrying Directive, diagram-oracle CI job; blank-line fix (raw-HTML block integrity) caught by on-device rendering | - |
 | W2-6 | SEO emission: full documents + head meta + JSON-LD + llms.txt + sitemap + robots (estate-seo floor) | done | docs-compiler 0.4.0 (cf761c3): front-matter inputs with h1/paragraph fallbacks, site.toml site config, recorded AI-crawler policy, attr-escaping (quote breakout found by oracle); verified on phone; round 18 d990f24, suite 7/7 | CI watch |
 | W2-4 | dogfood round 16 + pins + audit | done | estate-integration 33211b7: docs-core =0.2.0 (ui_semantics green, no $-prose regressions), docs-compiler =0.2.0; docs_program 5/5 with the Wave 2 interop test; audit: zero docs drift (omni-* errors remain, owner bookkeeping). CI green everywhere at tip after three graph fixes: docs-core had .cargo/config.toml committed (untracked, 8c9b813 - same fleet lesson as estate-integration), vet exemptions for the two new dep trees, and docs-compiler deny.toml admits MPL-2.0 (ammonia/cssparser) + CC0-1.0 (notify) - license-policy delta recorded here | closed |
+
+- 2026-11-20 rev 28: themes as config shipped (docs-compiler 0.7.5:
+  `site.toml accent`, adopted by all three tenants - portal violet
+  #a78bfa, canon emerald #34d399, preview sky #38bdf8) and the
+  subpath-canonical fix (0.7.6: every absolute URL joins base_path via
+  SiteConfig::full_url). QA against the live sites caught two real
+  bugs: the canon tenant was serving UNSTYLED (build passed no
+  --base-path, root-relative /_assets/ 404 under the project subpath -
+  fixed in the tenant workflow, verified live), and both generated
+  site.tomls hardcoded localhost/wrong origins (fixed in
+  build-islands.mjs and gen_pages.py, which also gained accent
+  passthrough). Phase C flip package delivered: solid-fx PARITY.md
+  (inventory: SSG 470 pages vs astro 439; search/atom/robots/SEO
+  surfaces preview-win; single gap = route shape, Option A redirect
+  map recommended; flip plan + acceptance criteria). Wasmtime
+  RUSTSEC-2026-0566/0567/0569/0571 swept: docs-witness 0.1.1
+  published, compiler/search/estate-integration locks + vet at
+  36.0.23, all CI green. Wave-2 remainder scoped above (versioning =
+  CI-snapshot shape; i18n deferred with trigger). Estate pins move:
+  docs-compiler =0.7.6 for tenant workflows (estate.yml crate pin
+  update = owner lane with the next estate-integration bump).
 
 - 2026-11-12 rev 12: all opt-ins shipped. docs-search 0.2.0
   (1edadad): format v2 (DSIDX2) with (doc, tf) postings - full BM25
