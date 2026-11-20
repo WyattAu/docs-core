@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-20  rev: 28
+updated: 2026-11-20  rev: 29
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -106,6 +106,31 @@ pulls the corresponding scope.
 | W2-5 | Diagrams: d2 fences -> static SVG | done | docs-compiler 0.3.1 (0.3.0 yanked): out-of-process d2 v0.9.0, body-carrying Directive, diagram-oracle CI job; blank-line fix (raw-HTML block integrity) caught by on-device rendering | - |
 | W2-6 | SEO emission: full documents + head meta + JSON-LD + llms.txt + sitemap + robots (estate-seo floor) | done | docs-compiler 0.4.0 (cf761c3): front-matter inputs with h1/paragraph fallbacks, site.toml site config, recorded AI-crawler policy, attr-escaping (quote breakout found by oracle); verified on phone; round 18 d990f24, suite 7/7 | CI watch |
 | W2-4 | dogfood round 16 + pins + audit | done | estate-integration 33211b7: docs-core =0.2.0 (ui_semantics green, no $-prose regressions), docs-compiler =0.2.0; docs_program 5/5 with the Wave 2 interop test; audit: zero docs drift (omni-* errors remain, owner bookkeeping). CI green everywhere at tip after three graph fixes: docs-core had .cargo/config.toml committed (untracked, 8c9b813 - same fleet lesson as estate-integration), vet exemptions for the two new dep trees, and docs-compiler deny.toml admits MPL-2.0 (ammonia/cssparser) + CC0-1.0 (notify) - license-policy delta recorded here | closed |
+
+- 2026-11-20 rev 29: PHASE C FLIP EXECUTED. solid-fx production is now
+  the docs-compiler SSG (deploy-docs.yml astro job dropped - rollback
+  is one revert). Legacy astro routes (439, derived from the docs tree
+  by the Starlight lowercase rule) resolve through 915 meta-refresh
+  stubs emitted by scripts/gen-redirects.mjs: 433 exact/prefixed page
+  matches (dash-insensitive name matching with exact > category-
+  prefixed > prefix tiers), 6 section fallbacks (legacy components the
+  islands pipeline does not ship yet: highlighttext, gpuhistogram,
+  causticsbackground, smoothscroll, stackingcards, warpbackground),
+  471 retired /preview/ routes, 5 category roots. All six PARITY.md
+  acceptance criteria verified live, including the mobile spot-check
+  ON THE S7 COMPAT FLOOR via adb: island demo hydrates, breadcrumbs/
+  pager/active-nav styled, search.json + search.bin 200, canonicals
+  origin-joined with no /preview. Same day: estate.yml claims
+  omni-block/omni-sbe/omni-task under os-core (crates.io repository
+  field evidence; published-but-unclaimed errors cleared; remaining
+  "composed by no repo listed in CONSUMERS" lines are consumer-graph
+  bookkeeping, owner lane); estate-integration pins moved
+  docs-compiler =0.7.6 / docs-witness =0.1.1 with the pin-agreement
+  test updated (suite 9/9); Pixel 10 Pro screen-on datapoint pulled
+  via adb: totalScreenOnTime 13d4h22m35s (usagestats daily aggregate,
+  2026-11-20, battery 53% USB-charging). Still owner-lane:
+  trade-tester billing (payment authority; the procurement doc's open
+  item is a ~10-30/mo VPS decision).
 
 - 2026-11-20 rev 28: themes as config shipped (docs-compiler 0.7.5:
   `site.toml accent`, adopted by all three tenants - portal violet
