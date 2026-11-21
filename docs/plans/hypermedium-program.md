@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-21  rev: 30
+updated: 2026-11-21  rev: 31
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -55,7 +55,7 @@ server). Versioning, i18n, diagrams (D2), and the Pagefind question
 | D | Phase D tenant: pattern-standards canon on the SSG | done | LIVE IN PRODUCTION (wyattau.github.io/pattern-standards, deploy-docs workflow, Pages auto-enabled): 32 pages verified on-device (A53) - chrome, sidebar, canon typeset; local build: 143 sidecars, dictionary - chrome + sidebar + Foundations IV typeset; site.toml committed to the canon repo as the tenant config | - |
 | W2-12 | Estate survey: 10 unregistered repos flagged for the owner | done | pattern-standards, skygauge, clawdius-fleetctl, eventbusd, authbox, flagsd, SimpleInfrastructureStack, peregrine, os-core, homebite-scraper - none in estate.yml; sidecars/daemons (eventbusd/authbox/flagsd) are rust-kit candidates; pattern-standards is an SSG tenant candidate | owner bookkeeping |
 | W2-B | Chrome parity (phase B): breadcrumbs + base_path + og:image + atom feed | done | docs-compiler 0.7.0: base_path prefixes every chrome URL (subpath hosting), breadcrumbs nav in body, og:image/twitter:image, atom.xml feed (dated pages newest-first), styled chrome-wrapped 404.html, CLI build subcommand with --base-path (preview deploys) | - |
-| W2-14 | DocSearch island wasm-first upgrade | superseded (owner reverted the parallel rewrite as incomplete; the reader ABI ships in docs-search 0.3.1 and the JSON-corpus DocSearch is live+verified - the wasm consumer returns to the queue when someone deliberately picks it up) | design settled: props += wasmUrl/binUrl; lazy-load docs_search.wasm + search.bin (0.3.1 reader ABI), query per keystroke, map doc ids -> corpus array (doc id = corpus index); JSON scoring stays the fallback; failure -> silent fallback. Two-session lesson: three attempts at this edit degraded under fatigue - execute on fresh context, surgical edits only, no full-file rewrites | - |
+| W2-14 | DocSearch island wasm-first upgrade | done (rev 31: fresh-context pickup, surgical edits; wasm-first with fail-soft JSON fallback; on-site console + network verified; three subpath-URL engine bugs found and fixed en route - 0.7.8/0.7.9) | design settled: props += wasmUrl/binUrl; lazy-load docs_search.wasm + search.bin (0.3.1 reader ABI), query per keystroke, map doc ids -> corpus array (doc id = corpus index); JSON scoring stays the fallback; failure -> silent fallback. Two-session lesson: three attempts at this edit degraded under fatigue - execute on fresh context, surgical edits only, no full-file rewrites | - |
 
 ### Wave-2 remainder scoping (2026-11-20, rev 28)
 
@@ -106,6 +106,34 @@ pulls the corresponding scope.
 | W2-5 | Diagrams: d2 fences -> static SVG | done | docs-compiler 0.3.1 (0.3.0 yanked): out-of-process d2 v0.9.0, body-carrying Directive, diagram-oracle CI job; blank-line fix (raw-HTML block integrity) caught by on-device rendering | - |
 | W2-6 | SEO emission: full documents + head meta + JSON-LD + llms.txt + sitemap + robots (estate-seo floor) | done | docs-compiler 0.4.0 (cf761c3): front-matter inputs with h1/paragraph fallbacks, site.toml site config, recorded AI-crawler policy, attr-escaping (quote breakout found by oracle); verified on phone; round 18 d990f24, suite 7/7 | CI watch |
 | W2-4 | dogfood round 16 + pins + audit | done | estate-integration 33211b7: docs-core =0.2.0 (ui_semantics green, no $-prose regressions), docs-compiler =0.2.0; docs_program 5/5 with the Wave 2 interop test; audit: zero docs drift (omni-* errors remain, owner bookkeeping). CI green everywhere at tip after three graph fixes: docs-core had .cargo/config.toml committed (untracked, 8c9b813 - same fleet lesson as estate-integration), vet exemptions for the two new dep trees, and docs-compiler deny.toml admits MPL-2.0 (ammonia/cssparser) + CC0-1.0 (notify) - license-policy delta recorded here | closed |
+
+- 2026-11-21 rev 31: W2-14 CLOSED (deliberate fresh-context pickup, per
+  the two-attempt lesson). DocSearch is wasm-first: optional
+  wasmUrl/binUrl props lazily load docs_search.wasm + search.bin on
+  mount through the docs-search 0.3.1 reader ABI (alloc/copy/open,
+  BM25 query per keystroke, doc ids map onto the corpus array), and
+  any failure in the whole path flips a flag and falls back to JSON
+  corpus scoring - fail-soft, never a broken search box. The Demo
+  maps the chrome's verbatim props (index/wasm/bin) onto the
+  component. ABI proven twice before shipping: a node harness against
+  the real production artifacts (open handle 1, queries map to correct
+  corpus entries), then a live headless-Chromium session on the
+  deployed site (network log shows all four artifacts single-prefixed;
+  typing "blob cursor" renders the Blob Cursor result + "1 result(s),
+  client-side, zero server"; console clean except a pre-existing
+  favicon 404). The dogfood loop earned its keep THREE times over:
+  live QA surfaced (1) search_index prefixed twice + (2) wasm/bin URLs
+  double-slashed - every subpath search since the props shipped 404'd
+  silently (docs-compiler 0.7.8, tests/search_props.rs guards subpath/
+  root/JSON-only shapes); then (3) the search_island CHUNK url shipped
+  verbatim and 404'd under every subpath deploy - the header search
+  never hydrated at all (0.7.9; absolute http(s) island URLs pass
+  through). Known UX gap for the owner: on narrow mobile the header
+  search input overflows out of view (long site_title + fixed w-48
+  input) - search works but needs a mobile header pass. Pin ripple:
+  0.7.7/0.7.8/0.7.9 in one day (gz determinism, search props, chunk
+  prefix); estate-integration docs_program 9/9 + vet each time; all
+  tenant deploys green.
 
 - 2026-11-21 rev 30: DETERMINISM HARDENED (docs-compiler 0.7.7). The
   flip audit's two-build check found every raw artifact byte-identical
