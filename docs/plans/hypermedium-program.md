@@ -1,7 +1,7 @@
 # hypermedium-program
 
 status: done
-updated: 2026-11-20  rev: 29
+updated: 2026-11-21  rev: 30
 
 Program: extend docs-core (ADR-0004 §2.5) toward the "verifiable, reactive
 documentation hypermedium": proof-carrying docs, symbol-anchored includes,
@@ -106,6 +106,20 @@ pulls the corresponding scope.
 | W2-5 | Diagrams: d2 fences -> static SVG | done | docs-compiler 0.3.1 (0.3.0 yanked): out-of-process d2 v0.9.0, body-carrying Directive, diagram-oracle CI job; blank-line fix (raw-HTML block integrity) caught by on-device rendering | - |
 | W2-6 | SEO emission: full documents + head meta + JSON-LD + llms.txt + sitemap + robots (estate-seo floor) | done | docs-compiler 0.4.0 (cf761c3): front-matter inputs with h1/paragraph fallbacks, site.toml site config, recorded AI-crawler policy, attr-escaping (quote breakout found by oracle); verified on phone; round 18 d990f24, suite 7/7 | CI watch |
 | W2-4 | dogfood round 16 + pins + audit | done | estate-integration 33211b7: docs-core =0.2.0 (ui_semantics green, no $-prose regressions), docs-compiler =0.2.0; docs_program 5/5 with the Wave 2 interop test; audit: zero docs drift (omni-* errors remain, owner bookkeeping). CI green everywhere at tip after three graph fixes: docs-core had .cargo/config.toml committed (untracked, 8c9b813 - same fleet lesson as estate-integration), vet exemptions for the two new dep trees, and docs-compiler deny.toml admits MPL-2.0 (ammonia/cssparser) + CC0-1.0 (notify) - license-policy delta recorded here | closed |
+
+- 2026-11-21 rev 30: DETERMINISM HARDENED (docs-compiler 0.7.7). The
+  flip audit's two-build check found every raw artifact byte-identical
+  but ALL 479 gz sidecars differing - `gzip -9` embedded the artifact
+  mtime in the header (brotli/zstd/dcz/dict were already stable).
+  Fixed with `gzip -n` + a determinism oracle in tests/compress.rs
+  (same bytes, mtimes 4.5 years apart, identical sidecars). End-to-end
+  proof with the published 0.7.7: two independent solid-fx builds
+  including 1915 sidecars + 915 redirect stubs diff to ZERO. Pin
+  ripple: estate-integration =0.7.7 (docs_program 9/9, vet), tenant
+  workflows bumped (canon/portal/solid-fx deploys green). Also
+  re-verified on the fresh tip: the 6 flip section-fallbacks are
+  still accurate (islands pipeline unchanged at 434 islands/470
+  pages; GpuHistogram lives only under extras/fx, correctly stubbed).
 
 - 2026-11-20 rev 29: PHASE C FLIP EXECUTED. solid-fx production is now
   the docs-compiler SSG (deploy-docs.yml astro job dropped - rollback
